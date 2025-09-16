@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyJoke - Laugh Instantly!</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        .hero {
+            width: 100%;
+            background: linear-gradient(90deg, #007bff 60%, #00c6ff 100%);
+            color: #fff;
+            padding: 60px 0 40px 0;
+            text-align: center;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        }
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            opacity: 0.85;
+        }
+        .container {
+            max-width: 500px;
+            margin: -40px auto 0 auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            padding: 40px 30px 30px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #jokeDisplay {
+            font-size: 1.2rem;
+            color: #333;
+            background: #f1f8ff;
+            border-radius: 8px;
+            padding: 24px 18px;
+            margin-bottom: 24px;
+            min-height: 60px;
+            box-shadow: 0 2px 8px rgba(0,123,255,0.08);
+            text-align: center;
+            transition: background 0.3s;
+        }
+        #getJokeBtn {
+            padding: 12px 32px;
+            font-size: 1.1rem;
+            border: none;
+            background: linear-gradient(90deg, #007bff 60%, #00c6ff 100%);
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,123,255,0.12);
+            transition: background 0.2s, transform 0.2s;
+        }
+        #getJokeBtn:hover {
+            background: linear-gradient(90deg, #0056b3 60%, #0099cc 100%);
+            transform: translateY(-2px) scale(1.04);
+        }
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            color: #888;
+            font-size: 0.95rem;
+        }
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2rem; }
+            .container { padding: 24px 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>PyJoke</h1>
+        <p>Your daily dose of programming humor.<br>Click below and get a random joke instantly!</p>
+    </div>
+    <div class="container">
+        <div id="jokeDisplay" class="data-display">Ready for a laugh? Click the button!</div>
+        <button id="getJokeBtn">Get a Joke</button>
+    </div>
+    <div class="footer">
+        &copy; 2025 PyJoke WebApp &mdash; Powered by <a href="https://pyjokes.readthedocs.io/" style="color:#007bff;text-decoration:none;">pyjokes</a>
+    </div>
+    <script>
+        async function fetchData(url, displayElementId) {
+            const displayElement = document.getElementById(displayElementId);
+            displayElement.textContent = 'Loading...';
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                displayElement.textContent = data.joke || "No joke found.";
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                displayElement.textContent = 'Error: Failed to fetch joke.';
+            }
+        }
+
+        document.getElementById('getJokeBtn').addEventListener('click', () => {
+            fetchData('/get_joke', 'jokeDisplay');
+        });
+    </script>
+</body>
+</html>
